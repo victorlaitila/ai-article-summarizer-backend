@@ -1,0 +1,34 @@
+# Virtual environment
+venv/
+env/
+
+# Python cache files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Logs
+*.log
+
+# Environment variables
+.env
+.env.*
+
+# Editor directories and files
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Byte-compiled / distribution / packaging
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
