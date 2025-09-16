@@ -23,7 +23,7 @@ app.add_middleware(
 )
 
 # Load summarization model
-summarizer = pipeline("summarization", model="facebook/bart-large-cnn")
+summarizer = pipeline("summarization", model="sshleifer/distilbart-cnn-12-6")
 
 class URLInput(BaseModel):
   url: str
