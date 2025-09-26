@@ -1,7 +1,7 @@
-fastapi==0.112.0
-uvicorn[standard]==0.23.2
-trafilatura==1.12.0
-transformers==4.44.0
-torch==2.5.1
-pydantic==2.6.2
-lxml>=5.0.0
+fastapi
+uvicorn[standard]
+trafilatura
+requests
+pydantic
+lxml
+python-dotenv
