@@ -13,7 +13,7 @@ app = FastAPI(title="Article Scraper + Summarizer")
 
 origins = [
   "http://localhost:5173",
-  "https://victorlaitila.github.io/ai-article-summarizer-frontend"
+  "https://victorlaitila.github.io"
 ]
 
 app.add_middleware(
