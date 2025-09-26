@@ -90,4 +90,8 @@ async def scrape_and_summarize(input: URLInput):
     return {"error": f"Summarization failed: {str(e)}"}
 
   return {"article_text": text, "summary": summary_text}
+
+@app.get("/health")
+def health_check():
+  return {"status": "ok"}
   
