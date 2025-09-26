@@ -3,7 +3,10 @@
 This is the FastAPI **backend** service for the AI Article Summarizer project.  
 It provides an endpoint to scrape articles from the web and generate AI-based summaries by calling the Hugging Face Inference API.
 
----
+Frontend repository can be found [here](https://github.com/victorlaitila/ai-article-summarizer-frontend)
+
+## Live Demo
+The app is live here: [AI Article Summarizer](https://victorlaitila.github.io/ai-article-summarizer-frontend/)
 
 ## Running Locally
 
@@ -31,8 +34,6 @@ uvicorn main:app --reload
 
 The API will now be available at `http://127.0.0.1:8000`
 
----
-
 ## API Endpoints
 
 ### `POST /scrape-and-summarize`
@@ -55,8 +56,6 @@ Scrapes an article from a given URL and returns a summary.
 }
 ```
 
----
-
 ## Environment Variables
 
 Create a `.env` file in the project root with:
@@ -65,11 +64,6 @@ Create a `.env` file in the project root with:
 HUGGINGFACE_API_TOKEN=your_huggingface_token_here
 ```
 
----
-
 ## Deployment
 
-The backend is deployed on **Render** at:
-
-# TODO: UPDATE BELOW
-`https://<your-backend-service>.onrender.com`
+The backend is deployed on **Fly.io** at: [Server](https://viclait-article-summarizer-backend.fly.dev/)
