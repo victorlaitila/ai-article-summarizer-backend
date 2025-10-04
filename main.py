@@ -1,17 +1,26 @@
-from fastapi import FastAPI
+import os
+import re
+import asyncio
+
+from fastapi import FastAPI, Request
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.concurrency import run_in_threadpool
+
+from slowapi import Limiter, _rate_limit_exceeded_handler
+from slowapi.util import get_remote_address
+from slowapi.errors import RateLimitExceeded
+
 from pydantic import BaseModel
 import trafilatura
 from trafilatura.settings import use_config
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.concurrency import run_in_threadpool
 from bs4 import BeautifulSoup
-import re
 import requests
 from dotenv import load_dotenv
-import os
-import asyncio
 
+limiter = Limiter(key_func=get_remote_address)
 app = FastAPI(title="Article Scraper + Summarizer")
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
 origins = [
   "http://localhost:5173",
@@ -53,7 +62,8 @@ def call_hf_api(text, max_length=150, min_length=50):
   raise RuntimeError(f"Hugging Face API error: {result}")
 
 @app.post("/scrape-and-summarize")
-async def scrape_and_summarize(input: URLInput):
+@limiter.limit("5/minute")
+async def scrape_and_summarize(request: Request, input: URLInput):
   # Trafilatura config
   config = use_config()
   config['EXTRA_HEADERS'] = {
