@@ -63,7 +63,3 @@ Create a `.env` file in the project root with:
 ```
 HUGGINGFACE_API_TOKEN=your_huggingface_token_here
 ```
-
-## Deployment
-
-The backend is deployed on **Fly.io** at: [Server](https://viclait-article-summarizer-backend.fly.dev/)
