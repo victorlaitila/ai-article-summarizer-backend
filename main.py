@@ -4,6 +4,8 @@ import trafilatura
 from trafilatura.settings import use_config
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.concurrency import run_in_threadpool
+from bs4 import BeautifulSoup
+import re
 import requests
 from dotenv import load_dotenv
 import os
@@ -43,7 +45,7 @@ def call_hf_api(text, max_length=150, min_length=50):
     "inputs": text,
     "parameters": {"max_length": max_length, "min_length": min_length}
   }
-  response = requests.post(HF_API_URL, headers=HEADERS, json=payload, timeout=60)
+  response = requests.post(HF_API_URL, headers=HEADERS, json=payload, timeout=90)
   response.raise_for_status()
   result = response.json()
   if isinstance(result, list) and "summary_text" in result[0]:
@@ -66,9 +68,25 @@ async def scrape_and_summarize(input: URLInput):
   if not downloaded:
     return {"error": "Could not fetch the URL. It may be invalid or blocked."}
 
-  text = await run_in_threadpool(lambda: trafilatura.extract(downloaded))
-  if not text:
+  html_text = await run_in_threadpool(lambda: trafilatura.extract(downloaded, output_format="html"))
+  if not html_text:
     return {"error": "Could not extract article text."}
+
+  soup = BeautifulSoup(html_text, "html.parser")
+
+  # Extract text with spacing between paragraphs/headings
+  readable_text_parts = []
+  for element in soup.find_all(["h1", "h2", "h3", "h4", "h5", "p", "li"]):
+    text_piece = element.get_text(strip=True)
+    if element.name.startswith("h"):
+      text_piece = f"\n{text_piece}\n"
+    readable_text_parts.append(text_piece)
+
+  text = "\n\n".join(readable_text_parts)
+
+  # Sanitize text
+  text = text.strip()
+  text = re.sub(r'\n{2,}', '\n\n', text)  
 
   # Summarization
   try:

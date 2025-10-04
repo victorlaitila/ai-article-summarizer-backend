@@ -6,3 +6,4 @@ pydantic
 lxml
 lxml_html_clean
 python-dotenv
+beautifulsoup4
