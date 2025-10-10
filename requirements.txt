@@ -8,3 +8,5 @@ lxml_html_clean
 python-dotenv
 beautifulsoup4
 slowapi
+PyPDF2
+python-multipart
