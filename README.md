@@ -1,12 +1,14 @@
 # AI Article Summarizer Backend
 
 This is the FastAPI **backend** service for the AI Article Summarizer project.  
-It provides an endpoint to scrape articles from the web and generate AI-based summaries by calling the Hugging Face Inference API.
+It provides endpoints to scrape articles from the web and/or generate AI-based summaries by calling the Hugging Face Inference API.
 
 Frontend repository can be found [here](https://github.com/victorlaitila/ai-article-summarizer-frontend)
 
 ## Live Demo
 The app is live here: [AI Article Summarizer](https://victorlaitila.github.io/ai-article-summarizer-frontend/)
+
+NOTE: the demo uses a mock server with static data and does not call the actual backend API in order to avoid deployment costs.
 
 ## Running Locally
 
@@ -36,15 +38,36 @@ The API will now be available at `http://127.0.0.1:8000`
 
 ## API Endpoints
 
-### `POST /scrape-and-summarize`
+### `POST /summarize-text`
 
-Scrapes an article from a given URL and returns a summary.
+Scrapes an article from a given URL and returns the article + summary (or summarizes directly using free text).
 
 **Request Body:**
 ```json
 {
-  "url": "https://example.com/article",
+  "type": "url", // or "text"
+  "value": "https://example.com/article",
   "mode": "default" // Options: "default", "bullets", "simple"
+}
+```
+
+**Response:**
+```json
+{
+  "article_text": "...",
+  "summary": "..."
+}
+```
+
+### `POST /summarize-file`
+
+Returns the article + summary based on the file content.
+
+**Request Body:**
+```json
+{
+  "file": "example.pdf",
+  "mode": "bullets"
 }
 ```
 
