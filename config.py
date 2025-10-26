@@ -11,7 +11,7 @@ if not HF_TOKEN:
 if not HF_MODEL:
   raise RuntimeError("Set HF_MODEL environment variable")
 
-HF_API_URL = f"https://api-inference.huggingface.co/models/{HF_MODEL}"
+HF_API_URL = f"https://router.huggingface.co/hf-inference/models/{HF_MODEL}"
 HEADERS = {"Authorization": f"Bearer {HF_TOKEN}"}
 
 CORS_ORIGINS = [
