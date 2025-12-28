@@ -32,10 +32,16 @@ pip install -r requirements.txt
 
 ### 4. Run the server
 ```bash
-uvicorn main:app --reload
+# with Docker Compose v2+ (recommended)
+docker compose up --build
+
+# or with the docker-compose CLI
+docker-compose up --build
 ```
 
 The API will now be available at `http://127.0.0.1:8000`
+
+(If you prefer to run the app locally without Docker for development, you can still start uvicorn directly: uvicorn main:app --reload --port 8080.)
 
 ## API Endpoints
 
