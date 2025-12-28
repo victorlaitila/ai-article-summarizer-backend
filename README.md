@@ -45,7 +45,7 @@ The API will now be available at `http://127.0.0.1:8000`
 
 ## API Endpoints
 
-### `POST /summarize-text`
+### `POST /summarize/text`
 
 Scrapes an article from a given URL and returns the article + summary (or summarizes directly using free text).
 
@@ -66,7 +66,7 @@ Scrapes an article from a given URL and returns the article + summary (or summar
 }
 ```
 
-### `POST /summarize-file`
+### `POST /summarize/file`
 
 Returns the article + summary based on the file content.
 

@@ -6,7 +6,7 @@ from pydantic import BaseModel
 from services.hf_client import summarize_text
 from services.extractor import extract_text_from_url, extract_text_from_file
 
-router = APIRouter()
+router = APIRouter(prefix="/summarize", tags=["summarization"])
 limiter = Limiter(key_func=get_remote_address)
 
 class SummarizeInput(BaseModel):
@@ -14,7 +14,7 @@ class SummarizeInput(BaseModel):
   value: str
   mode: str = "default"
 
-@router.post("/summarize-text")
+@router.post("/text")
 @limiter.limit("5/minute")
 async def summarize(request: Request, input: SummarizeInput):
   try:
@@ -32,7 +32,7 @@ async def summarize(request: Request, input: SummarizeInput):
   except Exception as e:
     raise HTTPException(status_code=400, detail=str(e))
 
-@router.post("/summarize-file")
+@router.post("/file")
 @limiter.limit("5/minute")
 async def summarize_file(
   request: Request,

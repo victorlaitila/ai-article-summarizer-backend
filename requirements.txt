@@ -10,3 +10,6 @@ beautifulsoup4
 slowapi
 PyPDF2
 python-multipart
+databases
+asyncpg
+SQLAlchemy
