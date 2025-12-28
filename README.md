@@ -3,10 +3,11 @@
 This is the FastAPI **backend** service for the AI Article Summarizer project.  
 It provides endpoints to scrape articles from the web and/or generate AI-based summaries by calling the Hugging Face Inference API.
 
-Frontend repository can be found [here](https://github.com/victorlaitila/ai-article-summarizer-frontend)
+Frontend repository can be found [here](https://github.com/victorlaitila/ai-article-summarizer/)
 
 ## Live Demo
-The app is live here: [AI Article Summarizer](https://victorlaitila.github.io/ai-article-summarizer-frontend/)
+The app is live here: [AI Article Summarizer](https://victorlaitila.github.io/ai-article-summarizer/)
+
 
 NOTE: the demo uses a mock server with static data and does not call the actual backend API in order to avoid deployment costs.
 
