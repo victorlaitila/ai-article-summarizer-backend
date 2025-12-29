@@ -29,7 +29,6 @@ async def remove_summary(summary_id: int):
   except Exception as e:
     raise HTTPException(status_code=500, detail=str(e))
 
-
 @router.get("", name="List summaries")
 async def list_summaries(limit: int = Query(50, gt=0, le=500)):
   try:

@@ -30,12 +30,13 @@ async def create_tables_if_not_exists():
 async def insert_summary(summary: str, keywords: list | None = None):
   query = (
     "INSERT INTO summaries(summary, keywords) "
-    "VALUES (:summary, CAST(:keywords AS jsonb)) RETURNING id"
+    "VALUES (:summary, CAST(:keywords AS jsonb)) "
+    "RETURNING id, summary, keywords, created_at"
   )
   values = {"summary": summary, "keywords": json.dumps(keywords or [])}
   try:
-    inserted = await database.execute(query, values=values)
-    return inserted
+    row = await database.fetch_one(query, values=values)
+    return dict(row) if row else None
   except Exception:
     raise
 
