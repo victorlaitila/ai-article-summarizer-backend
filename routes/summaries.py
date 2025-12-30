@@ -8,16 +8,19 @@ from db import insert_summary, delete_summary, fetch_summaries
 router = APIRouter(prefix="/summaries", tags=["summaries"])
 
 class SaveSummaryInput(BaseModel):
-  summary: str
+  content: str
   keywords: Optional[List[str]] = None
+  url: Optional[str] = None
 
 @router.post("", status_code=201)
 async def save_summary(payload: SaveSummaryInput):
-  if not payload.summary:
-    raise HTTPException(status_code=400, detail="summary is required")
+  if not payload.content:
+    raise HTTPException(status_code=400, detail="content is required")
   try:
-    inserted_id = await insert_summary(summary=payload.summary, keywords=payload.keywords)
-    return {"id": inserted_id}
+    created = await insert_summary(content=payload.content, keywords=payload.keywords, url=payload.url)
+    if not created:
+      raise HTTPException(status_code=500, detail="Failed to create summary")
+    return created
   except Exception as e:
     raise HTTPException(status_code=500, detail=str(e))
 
