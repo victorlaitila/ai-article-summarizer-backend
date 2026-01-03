@@ -5,8 +5,10 @@ from trafilatura.settings import use_config
 from bs4 import BeautifulSoup
 from PyPDF2 import PdfReader
 from utils.text import clean_text
+import json
 
-async def extract_text_from_url(url: str) -> str:
+async def extract_text_from_url(url: str) -> tuple[str, str | None]:
+  """Extract text and title from URL. Returns (text, title)."""
   config = use_config()
   config["EXTRA_HEADERS"] = {
     "User-Agent": (
@@ -18,6 +20,19 @@ async def extract_text_from_url(url: str) -> str:
   downloaded = await run_in_threadpool(lambda: trafilatura.fetch_url(url, config=config))
   if not downloaded:
     raise ValueError("Could not fetch the URL. It may be invalid or blocked.")
+
+  # Extract metadata including title
+  metadata_json = await run_in_threadpool(
+    lambda: trafilatura.extract(downloaded, output_format="json", with_metadata=True)
+  )
+  
+  title = None
+  if metadata_json:
+    try:
+      metadata = json.loads(metadata_json)
+      title = metadata.get("title")
+    except:
+      pass
 
   html_text = await run_in_threadpool(lambda: trafilatura.extract(downloaded, output_format="html"))
   if not html_text:
@@ -33,9 +48,10 @@ async def extract_text_from_url(url: str) -> str:
       txt = f"\n{txt}\n"
     parts.append(txt)
 
-  return clean_text("\n\n".join(parts))
+  return clean_text("\n\n".join(parts)), title
 
-async def extract_text_from_file(file: UploadFile) -> str:
+async def extract_text_from_file(file: UploadFile) -> tuple[str, str]:
+  """Extract text and title from file. Returns (text, title) where title is the filename."""
   text = ""
   filename = file.filename.lower()
   content_type = file.content_type
@@ -53,4 +69,6 @@ async def extract_text_from_file(file: UploadFile) -> str:
   if not text:
     raise ValueError("File appears to be empty or unreadable.")
 
-  return text
+  title = file.filename
+
+  return text, title

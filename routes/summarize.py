@@ -18,8 +18,9 @@ class SummarizeInput(BaseModel):
 @limiter.limit("5/minute")
 async def summarize(request: Request, input: SummarizeInput):
   try:
+    title = None
     if input.type == "url":
-      text = await extract_text_from_url(input.value)
+      text, title = await extract_text_from_url(input.value)
     elif input.type == "text":
       text = input.value.strip()
       if not text:
@@ -28,7 +29,7 @@ async def summarize(request: Request, input: SummarizeInput):
       raise HTTPException(status_code=400, detail=f"Unsupported type '{input.type}'")
 
     summary = await summarize_text(text, input.mode)
-    return {"article_text": text, "summary": summary}
+    return {"article_text": text, "summary": summary, "title": title}
   except Exception as e:
     raise HTTPException(status_code=400, detail=str(e))
 
@@ -40,8 +41,8 @@ async def summarize_file(
   mode: str = Form("default")
 ):
   try:
-    text = await extract_text_from_file(file)
+    text, title = await extract_text_from_file(file)
     summary = await summarize_text(text, mode)
-    return {"article_text": text, "summary": summary}
+    return {"article_text": text, "summary": summary, "title": title}
   except Exception as e:
     raise HTTPException(status_code=400, detail=str(e))

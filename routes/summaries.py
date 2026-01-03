@@ -11,13 +11,14 @@ class SaveSummaryInput(BaseModel):
   content: str
   keywords: Optional[List[str]] = None
   url: Optional[str] = None
+  title: Optional[str] = None
 
 @router.post("", status_code=201)
 async def save_summary(payload: SaveSummaryInput):
   if not payload.content:
     raise HTTPException(status_code=400, detail="content is required")
   try:
-    created = await insert_summary(content=payload.content, keywords=payload.keywords, url=payload.url)
+    created = await insert_summary(content=payload.content, keywords=payload.keywords, url=payload.url, title=payload.title)
     if not created:
       raise HTTPException(status_code=500, detail="Failed to create summary")
     return created
